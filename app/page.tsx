@@ -22,12 +22,12 @@ export default function Home() {
       />
 
       {/* Hidden Phase Toggle for Demo/Testing */}
-      <div 
+      <div
         className="fixed bottom-0 right-0 p-4 z-[100] opacity-0 hover:opacity-100 flex gap-2"
         title="Hidden Debug Toggle"
       >
-        {[1, 2, 3, 4].map(p => (
-          <button 
+        {[1, 2, 3, 4].map((p) => (
+          <button
             key={p}
             onClick={() => setCurrentPhase(p)}
             className={`w-8 h-8 rounded-full flex items-center justify-center text-xs border border-white/20 hover:bg-white/10
@@ -53,10 +53,10 @@ export default function Home() {
             {/* Content Area - Maintain vertical one column design */}
             <div className="w-full py-5 md:py-8 px-6 md:px-20 flex flex-col items-center text-center gap-3 md:gap-6 text-white">
               {/* Launch Badge */}
-              <div className="flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/5 border border-white/10">
+              <div className="flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10">
                 <span className="w-2 h-2 rounded-full bg-[#CCFF00] animate-pulse" />
                 <span className="text-[#CCFF00] text-[10px] md:text-xs font-semibold tracking-[0.15em] uppercase">
-                  {currentPhase === 4 ? "Live Now" : "Current Progress Stage"}
+                  {currentPhase === 4 ? "Live Now" : "Release Date: TBA"}
                 </span>
               </div>
 
