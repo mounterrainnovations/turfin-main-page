@@ -68,13 +68,13 @@ export default function Home() {
                     <div
                       key={i}
                       className={`w-8 h-8 md:w-9 md:h-9 rounded-full border-2 border-black/40 flex items-center justify-center overflow-hidden transition-transform hover:scale-110 hover:z-20 ${
-                        char === "P"
+                        char === "P" || char === "G"
                           ? "bg-white"
                           : `bg-gradient-to-br ${
                               [
                                 "",
                                 "from-violet-400 to-purple-500",
-                                "from-amber-400 to-orange-500",
+                                "",
                                 "from-pink-400 to-rose-500",
                               ][i]
                             }`
@@ -84,6 +84,14 @@ export default function Home() {
                         <Image
                           src="/PLogo.png"
                           alt="P"
+                          width={36}
+                          height={36}
+                          className="object-cover w-full h-full"
+                        />
+                      ) : char === "G" ? (
+                        <Image
+                          src="/GLogo.webp"
+                          alt="G"
                           width={36}
                           height={36}
                           className="object-cover w-full h-full"
