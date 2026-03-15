@@ -26,7 +26,7 @@ export default function Navbar() {
           {["Features", "About", "Contact"].map((item) => (
             <Link
               key={item}
-              href={`#${item.toLowerCase()}`}
+              href={`/#${item.toLowerCase()}`}
               className="text-white/60 hover:text-[#CCFF00] text-sm font-medium transition-colors"
             >
               {item}
@@ -36,7 +36,7 @@ export default function Navbar() {
 
         {/* CTA */}
         <Link
-          href="#waitlist"
+          href="/#waitlist"
           className="px-5 py-2 rounded-xl bg-white/90 backdrop-blur-md text-black text-xs font-bold uppercase tracking-wider hover:bg-[#CCFF00] transition-all hover:scale-105 active:scale-95"
         >
           Get Early Access

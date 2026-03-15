@@ -10,7 +10,7 @@ export default function Footer() {
       <div className="flex flex-col md:flex-row items-center justify-between px-8 py-4 rounded-2xl border border-white/15 bg-black/25 backdrop-blur-md gap-4 md:gap-0">
         <div className="flex items-center gap-6">
           <p className="text-white/60 text-[10px] md:text-xs">
-            © {currentYear} TurfInApp. All rights reserved.
+            © {currentYear} RE Orbit Innovations Pvt Ltd. All rights reserved.
           </p>
           <div className="h-px w-4 bg-white/10 hidden md:block" />
           <div className="flex gap-4">
