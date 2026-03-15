@@ -86,6 +86,8 @@ export async function POST(request: NextRequest) {
           user_email: cleanEmail,
         },
       });
+    } else {
+      console.warn(`[Waitlist API] Skipping welcome email for ${cleanEmail} - ZEPTO_TEMPLATE_KEY_WELCOME is not configured.`);
     }
 
     return NextResponse.json(

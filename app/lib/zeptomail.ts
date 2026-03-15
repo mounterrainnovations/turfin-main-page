@@ -23,9 +23,16 @@ export async function sendTemplateEmail({
   templateKey,
   mergeInfo = {},
 }: SendTemplateEmailParams) {
-  if (!token) return { success: false, error: "Missing token" };
+  const recipientList = to.map((t) => t.email).join(", ");
+  
+  if (!token) {
+    console.error(`[ZeptoMail] Attempted to send email to ${recipientList} but ZEPTO_MAIL_TOKEN is missing.`);
+    return { success: false, error: "Missing token" };
+  }
 
   try {
+    console.log(`[ZeptoMail] Sending template ${templateKey} to: ${recipientList}`);
+    
     const response = await client.sendMailWithTemplate({
       template_key: templateKey,
       from: {
@@ -43,9 +50,10 @@ export async function sendTemplateEmail({
       ),
     });
 
+    console.log(`[ZeptoMail] Email sent successfully to ${recipientList}. Request ID: ${(response as { request_id?: string }).request_id || 'N/A'}`);
     return { success: true, data: response };
   } catch (error) {
-    console.error("ZeptoMail Error:", error);
+    console.error(`[ZeptoMail] Critical failure sending email to ${recipientList}:`, error);
     return { success: false, error };
   }
 }

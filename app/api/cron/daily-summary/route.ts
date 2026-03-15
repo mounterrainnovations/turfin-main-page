@@ -46,6 +46,8 @@ export async function GET(request: NextRequest) {
             date: yesterdayStart.toLocaleDateString("en-IN"),
           },
         });
+      } else {
+        console.warn(`[Cron] Skipping daily summary email - ADMIN_EMAIL or ZEPTO_TEMPLATE_KEY_DAILY_SUMMARY is not configured.`);
       }
     }
 
