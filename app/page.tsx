@@ -49,7 +49,7 @@ export default function Home() {
         {/* Glassmorphic Container with Dual Borders */}
         <div className="rounded-[40px] md:rounded-[48px] border border-white/10 bg-white/5 backdrop-blur-xl p-1.5 md:p-2 shadow-2xl w-full max-w-[880px] animate-fade-up premium-glow">
           {/* Lime Space (thick border) + Inner Glass (backdrop blur) */}
-          <div className="rounded-[32px] md:rounded-[40px] border-[5px] md:border-[8px] border-[#CCFF00] bg-black/40 backdrop-blur-2xl overflow-hidden">
+          <div id="waitlist" className="rounded-[32px] md:rounded-[40px] border-[5px] md:border-[8px] border-[#CCFF00] bg-black/40 backdrop-blur-2xl overflow-hidden">
             {/* Content Area - Maintain vertical one column design */}
             <div className="w-full py-5 md:py-8 px-6 md:px-20 flex flex-col items-center text-center gap-3 md:gap-6 text-white">
               {/* Launch Badge */}
