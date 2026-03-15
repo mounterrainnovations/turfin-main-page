@@ -13,15 +13,17 @@ export default function Home() {
 
 
   return (
-    <main className="relative h-[100dvh] w-full flex flex-col justify-between overflow-hidden">
+    <main className="relative min-h-[100dvh] w-full flex flex-col justify-between overflow-x-hidden">
       {/* Background Image */}
-      <Image
-        src="/turfInBG.png"
-        alt="Background"
-        fill
-        className="object-cover"
-        priority
-      />
+      <div className="fixed inset-0 -z-0">
+        <Image
+          src="/turfInBG.png"
+          alt="Background"
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
 
       {/* Navbar Container */}
       <div className="relative z-50 w-full flex justify-center pt-2 md:pt-4">
