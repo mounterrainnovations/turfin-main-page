@@ -1,5 +1,8 @@
+"use client";
+
 import { useState, useRef } from "react";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { X } from "@phosphor-icons/react";
 import Toast from "./Toast";
 
 const POPULAR_PROVIDERS = [
@@ -21,59 +24,62 @@ export default function WaitlistForm() {
     "idle" | "loading" | "success" | "error"
   >("idle");
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [showTurnstile, setShowTurnstile] = useState(false);
+  const [pendingEmail, setPendingEmail] = useState("");
   const turnstileRef = useRef<TurnstileInstance>(null);
 
-  const showToast = (message: string, type: "success" | "error") => {
+  const showToastMsg = (message: string, type: "success" | "error") => {
     setToast({ message, type });
   };
 
   const validateEmail = (mail: string) => {
     const cleanMail = mail.trim().toLowerCase();
-    
-    // Basic regex
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(cleanMail)) {
       return { valid: false, message: "Please enter a valid email address." };
     }
 
-    // Provider check
     const domain = cleanMail.split("@")[1];
     if (!POPULAR_PROVIDERS.includes(domain)) {
-      return { 
-        valid: false, 
-        message: "Please use a popular email provider (Gmail, Outlook, etc.)." 
+      return {
+        valid: false,
+        message: "Please use a popular email provider (Gmail, Outlook, etc.).",
       };
     }
 
     return { valid: true, cleanMail };
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Step 1: User clicks submit → validate email → show Turnstile overlay
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const validation = validateEmail(email);
     if (!validation.valid) {
-      showToast(validation.message || "Invalid email", "error");
+      showToastMsg(validation.message || "Invalid email", "error");
       setStatus("error");
+      setTimeout(() => setStatus("idle"), 3000);
       return;
     }
 
-    if (!turnstileToken) {
-      showToast("Please complete the security check.", "error");
-      setStatus("error");
-      return;
-    }
+    // Email is valid — show Turnstile overlay
+    setPendingEmail(validation.cleanMail!);
+    setShowTurnstile(true);
+  };
 
+  // Step 2: User passes Turnstile → actually submit to API
+  const handleTurnstileSuccess = async (token: string) => {
+    setShowTurnstile(false);
     setStatus("loading");
 
     try {
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          email: validation.cleanMail, 
-          turnstileToken 
+        body: JSON.stringify({
+          email: pendingEmail,
+          turnstileToken: token,
         }),
       });
 
@@ -83,31 +89,38 @@ export default function WaitlistForm() {
         throw new Error(data.error || "Something went wrong.");
       }
 
-      showToast("You've been added to the waitlist! 🎉", "success");
+      showToastMsg("You've been added to the waitlist! 🎉", "success");
       setStatus("success");
       setEmail("");
-      setTurnstileToken(null);
-      turnstileRef.current?.reset();
+      setPendingEmail("");
       setTimeout(() => setStatus("idle"), 4000);
     } catch (err) {
       setStatus("error");
-      showToast(err instanceof Error ? err.message : "Something went wrong.", "error");
-      setTurnstileToken(null);
-      turnstileRef.current?.reset();
+      showToastMsg(
+        err instanceof Error ? err.message : "Something went wrong.",
+        "error"
+      );
       setTimeout(() => setStatus("idle"), 4000);
+    } finally {
+      turnstileRef.current?.reset();
     }
   };
 
+  const handleTurnstileClose = () => {
+    setShowTurnstile(false);
+    turnstileRef.current?.reset();
+  };
+
   return (
-    <div className="w-full flex flex-col gap-0">
+    <>
       {toast && (
-        <Toast 
-          message={toast.message} 
-          type={toast.type} 
-          onClose={() => setToast(null)} 
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
         />
       )}
-      
+
       <form onSubmit={handleSubmit} className="w-full flex flex-col md:flex-row items-center gap-3">
         <div className="w-full flex-1 relative">
           <input
@@ -153,20 +166,51 @@ export default function WaitlistForm() {
           )}
         </button>
       </form>
-      
-      <div className="flex justify-center scale-90 md:scale-75 origin-top">
-        <Turnstile
-          ref={turnstileRef}
-          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
-          onSuccess={(token) => setTurnstileToken(token)}
-          onExpire={() => setTurnstileToken(null)}
-          onError={() => setTurnstileToken(null)}
-          options={{
-            size: "flexible",
-            theme: "dark",
-          }}
-        />
-      </div>
-    </div>
+
+      {/* Full-Screen Turnstile Overlay */}
+      {showTurnstile && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-sm animate-fade-in">
+          <div className="relative flex flex-col items-center gap-6 p-8 rounded-3xl border border-white/10 bg-black/60 backdrop-blur-2xl shadow-2xl max-w-sm w-full mx-4">
+            {/* Close button */}
+            <button
+              onClick={handleTurnstileClose}
+              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-white/10 transition-colors text-white/40 hover:text-white"
+            >
+              <X size={18} weight="bold" />
+            </button>
+
+            {/* Title */}
+            <div className="flex flex-col items-center gap-2 pt-2">
+              <span className="w-3 h-3 rounded-full bg-[#CCFF00] animate-pulse" />
+              <h3 className="text-white text-lg font-bold tracking-tight">
+                Security Check
+              </h3>
+              <p className="text-white/40 text-xs text-center">
+                Please verify you&apos;re human to continue
+              </p>
+            </div>
+
+            {/* Turnstile Widget */}
+            <div className="flex justify-center">
+              <Turnstile
+                ref={turnstileRef}
+                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
+                onSuccess={handleTurnstileSuccess}
+                onExpire={() => {
+                  turnstileRef.current?.reset();
+                }}
+                onError={() => {
+                  showToastMsg("Security check failed. Please try again.", "error");
+                  setShowTurnstile(false);
+                }}
+                options={{
+                  theme: "dark",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
