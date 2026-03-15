@@ -28,14 +28,14 @@ export default function Home() {
         <Navbar />
       </div>
 
-      {/* Main Content Area - Flexible scaling */}
-      <div className="relative z-10 flex-1 w-full flex items-center justify-center px-4 py-[1vh] md:py-[2vh]">
+      {/* Main Content Area - Centered with flex-1 */}
+      <div className="relative z-10 flex-1 w-full flex items-center justify-center px-4 py-4 md:py-6">
         {/* Glassmorphic Container with Dual Borders */}
-        <div className="rounded-[40px] md:rounded-[48px] border border-white/10 bg-white/5 backdrop-blur-xl p-1 md:p-1.5 shadow-2xl w-full max-w-[880px] animate-fade-up premium-glow">
+        <div className="rounded-[40px] md:rounded-[48px] border border-white/10 bg-white/5 backdrop-blur-xl p-1.5 md:p-2 shadow-2xl w-full max-w-[880px] animate-fade-up premium-glow">
           {/* Lime Space (thick border) + Inner Glass (backdrop blur) */}
-          <div id="waitlist" className="rounded-[32px] md:rounded-[40px] border-[4px] md:border-[8px] border-[#CCFF00] bg-black/40 backdrop-blur-2xl overflow-hidden">
+          <div id="waitlist" className="rounded-[32px] md:rounded-[40px] border-[5px] md:border-[8px] border-[#CCFF00] bg-black/40 backdrop-blur-2xl overflow-hidden">
             {/* Content Area - Maintain vertical one column design */}
-            <div className="w-full py-[2vh] md:py-[2.5vh] px-6 md:px-20 flex flex-col items-center text-center gap-[1vh] md:gap-[1.5vh] text-white">
+            <div className="w-full py-5 md:py-8 px-6 md:px-20 flex flex-col items-center text-center gap-3 md:gap-6 text-white">
               {/* Launch Badge */}
               <div className="flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 shrink-0">
                 <span className="w-2 h-2 rounded-full bg-[#CCFF00] animate-pulse" />
@@ -56,7 +56,7 @@ export default function Home() {
               </p>
 
               {/* Progress Steps */}
-              <div className="w-full max-w-3xl py-[0.5vh] md:py-[1vh] overflow-visible">
+              <div className="w-full max-w-3xl py-2 md:py-4 overflow-visible">
                 <ProgressSteps currentPhase={currentPhase} />
               </div>
 
