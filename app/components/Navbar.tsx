@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="z-50 w-[90%] max-w-[1200px] animate-fade-up">
+    <nav className="z-50 w-[90%] max-w-300 animate-fade-up">
       <div className="flex items-center justify-between px-6 py-3 rounded-2xl border border-white/10 bg-black/20 backdrop-blur-xl">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
@@ -37,9 +37,9 @@ export default function Navbar() {
         {/* CTA */}
         <Link
           href="/#waitlist"
-          className="px-5 py-2 rounded-xl bg-white/90 backdrop-blur-md text-black text-xs font-bold uppercase tracking-wider hover:bg-[#CCFF00] transition-all hover:scale-105 active:scale-95"
+          className="px-3 xs:px-5 py-2 rounded-xl bg-white/90 backdrop-blur-md text-black text-[10px] xs:text-xs font-bold uppercase tracking-wide xs:tracking-wider whitespace-nowrap hover:bg-[#CCFF00] transition-all hover:scale-105 active:scale-95"
         >
-          Get Early Access
+          <span className="hidden xs:inline">Get </span>Early Access
         </Link>
       </div>
     </nav>

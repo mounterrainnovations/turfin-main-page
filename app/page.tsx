@@ -7,8 +7,14 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ProgressSteps from "./components/ProgressSteps";
 
+const AVATARS = [
+  { char: "P", src: "/PLogo.png", gradient: null },
+  { char: "M", src: null, gradient: "from-violet-400 to-purple-500" },
+  { char: "G", src: "/GLogo.webp", gradient: null },
+  { char: "A", src: null, gradient: "from-pink-400 to-rose-500" },
+] as const;
+
 export default function Home() {
-  // Use environment variable for the current phase, defaulting to 1
   const currentPhase = Number(process.env.NEXT_PUBLIC_PROGRESS_PHASE) || 1;
 
 
@@ -31,13 +37,13 @@ export default function Home() {
       </div>
 
       {/* Main Content Area - Centered with flex-1 */}
-      <div className="relative z-10 flex-1 w-full flex items-center justify-center px-4 py-4 md:py-6">
+      <div className="relative z-10 flex-1 w-full flex items-center justify-center px-3 xs:px-4 py-2 xs:py-4 md:py-6">
         {/* Glassmorphic Container with Dual Borders */}
         <div className="rounded-[40px] md:rounded-[48px] border border-white/10 bg-white/5 backdrop-blur-xl p-1.5 md:p-2 shadow-2xl w-full max-w-[880px] animate-fade-up premium-glow">
           {/* Lime Space (thick border) + Inner Glass (backdrop blur) */}
           <div id="waitlist" className="rounded-[32px] md:rounded-[40px] border-[5px] md:border-[8px] border-[#CCFF00] bg-black/40 backdrop-blur-2xl overflow-hidden">
             {/* Content Area - Maintain vertical one column design */}
-            <div className="w-full py-5 md:py-8 px-6 md:px-20 flex flex-col items-center text-center gap-3 md:gap-6 text-white">
+            <div className="w-full py-3 xs:py-5 md:py-8 px-4 xs:px-6 md:px-20 flex flex-col items-center text-center gap-2 xs:gap-3 md:gap-6 text-white">
               {/* Launch Badge */}
               <div className="flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 shrink-0">
                 <span className="w-2 h-2 rounded-full bg-[#CCFF00] animate-pulse" />
@@ -71,38 +77,20 @@ export default function Home() {
               <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 mt-1 shrink-0">
                 {/* Avatar Stack */}
                 <div className="flex -space-x-2.5">
-                  {["P", "M", "G", "A"].map((char, i) => (
+                  {AVATARS.map(({ char, src, gradient }) => (
                     <div
-                      key={i}
+                      key={char}
                       className={`w-8 h-8 md:w-9 md:h-9 rounded-full border-2 border-black/40 flex items-center justify-center overflow-hidden transition-transform hover:scale-110 hover:z-20 ${
-                        char === "P" || char === "G"
-                          ? "bg-white"
-                          : `bg-gradient-to-br ${
-                              [
-                                "",
-                                "from-violet-400 to-purple-500",
-                                "",
-                                "from-pink-400 to-rose-500",
-                              ][i]
-                            }`
+                        src ? "bg-white" : `bg-linear-to-br ${gradient}`
                       }`}
                     >
-                      {char === "P" ? (
+                      {src ? (
                         <Image
-                          src="/PLogo.png"
-                          alt="P"
+                          src={src}
+                          alt={char}
                           width={36}
                           height={36}
                           className="object-cover w-full h-full"
-                        />
-                      ) : char === "G" ? (
-                        <Image
-                          src="/GLogo.webp"
-                          alt="G"
-                          width={36}
-                          height={36}
-                          className="object-cover w-full h-full"
-                          priority
                         />
                       ) : (
                         <span className="text-[10px] md:text-xs font-bold text-white/80">

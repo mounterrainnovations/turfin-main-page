@@ -6,13 +6,13 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="z-50 w-[90%] max-w-[1200px] animate-fade-up">
-      <div className="flex flex-col md:flex-row items-center justify-between px-8 py-4 rounded-2xl border border-white/15 bg-black/25 backdrop-blur-md gap-4 md:gap-0">
-        <div className="flex items-center gap-6">
+    <footer className="z-50 w-[90%] max-w-300 animate-fade-up">
+      <div className="flex flex-col md:flex-row items-center justify-between px-6 py-4 rounded-2xl border border-white/15 bg-black/25 backdrop-blur-md gap-3 md:gap-0">
+        {/* Left: copyright + legal links */}
+        <div className="flex flex-wrap justify-center md:justify-start items-center gap-x-4 gap-y-1">
           <p className="text-white/60 text-[10px] md:text-xs">
-            © {currentYear} RE Orbit Innovations Pvt Ltd. All rights reserved.
+            © {currentYear} RE Orbit Innovations Pvt Ltd.
           </p>
-          <div className="h-px w-4 bg-white/10 hidden md:block" />
           <div className="flex gap-4">
             <Link href="/privacy" className="text-white/60 hover:text-white transition-colors text-[10px] md:text-xs">
               Privacy Policy
@@ -23,11 +23,12 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
-          <p className="text-white/60 text-[10px] md:text-xs uppercase tracking-widest font-semibold italic">
+        {/* Right: tagline + socials */}
+        <div className="flex items-center gap-4">
+          <p className="text-white/60 text-[10px] md:text-xs uppercase tracking-widest font-semibold italic hidden sm:block">
             Powering the next gen of play
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             {["Twitter", "Instagram", "Discord"].map((social) => (
               <Link
                 key={social}
