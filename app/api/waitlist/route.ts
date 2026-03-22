@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/app/lib/supabase";
 import { sendTemplateEmail } from "@/app/lib/zeptomail";
 import { verifyTurnstileToken } from "@/app/lib/turnstile";
+import { checkRateLimit } from "@/app/lib/rateLimit";
 
 const POPULAR_PROVIDERS = [
   "gmail.com",
@@ -18,6 +19,21 @@ const POPULAR_PROVIDERS = [
 
 export async function POST(request: NextRequest) {
   try {
+    // 0. Rate limiting — 5 requests per IP per minute
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
+      request.headers.get("x-real-ip") ??
+      "unknown";
+
+    const rl = checkRateLimit(ip);
+    if (!rl.allowed) {
+      const retryAfterSec = Math.ceil(rl.retryAfterMs / 1000);
+      return NextResponse.json(
+        { error: `Too many requests. Please try again in ${retryAfterSec} seconds.` },
+        { status: 429, headers: { "Retry-After": String(retryAfterSec) } }
+      );
+    }
+
     const { email, turnstileToken } = await request.json();
 
     // 1. Bot Protection

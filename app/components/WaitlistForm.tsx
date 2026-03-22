@@ -2,8 +2,7 @@
 
 import { useState, useRef } from "react";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
-import { X } from "@phosphor-icons/react";
-import Toast from "./Toast";
+import { X, CheckCircle, Warning } from "@phosphor-icons/react";
 
 const POPULAR_PROVIDERS = [
   "gmail.com",
@@ -23,13 +22,13 @@ export default function WaitlistForm() {
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
-  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const [inlineMsg, setInlineMsg] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const [showTurnstile, setShowTurnstile] = useState(false);
   const [pendingEmail, setPendingEmail] = useState("");
   const turnstileRef = useRef<TurnstileInstance>(null);
 
   const showToastMsg = (message: string, type: "success" | "error") => {
-    setToast({ message, type });
+    setInlineMsg({ message, type });
   };
 
   const validateEmail = (mail: string) => {
@@ -113,20 +112,12 @@ export default function WaitlistForm() {
 
   return (
     <>
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
-
       <form onSubmit={handleSubmit} className="w-full flex flex-col md:flex-row items-center gap-3">
         <div className="w-full flex-1 relative">
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => { setEmail(e.target.value); if (inlineMsg?.type === "error") setInlineMsg(null); }}
             placeholder="Your mail address"
             required
             className="w-full h-[52px] rounded-full bg-white/5 backdrop-blur-md border border-white/15 px-6 text-white text-sm placeholder:text-white/30 outline-none focus:border-[#CCFF00]/50 focus:ring-1 focus:ring-[#CCFF00]/25 transition-all duration-300"
@@ -166,6 +157,31 @@ export default function WaitlistForm() {
           )}
         </button>
       </form>
+
+      {/* Inline notification */}
+      {inlineMsg && (
+        <div
+          className={`w-full mt-3 flex items-center gap-3 px-4 py-3 rounded-2xl border animate-fade-up ${
+            inlineMsg.type === "success"
+              ? "bg-[#CCFF00]/10 border-[#CCFF00]/30 text-[#CCFF00]"
+              : "bg-red-500/10 border-red-500/30 text-red-400"
+          }`}
+        >
+          <span className="flex-shrink-0">
+            {inlineMsg.type === "success"
+              ? <CheckCircle size={18} weight="fill" />
+              : <Warning size={18} weight="fill" />}
+          </span>
+          <p className="text-sm font-medium flex-1">{inlineMsg.message}</p>
+          <button
+            type="button"
+            onClick={() => setInlineMsg(null)}
+            className="flex-shrink-0 p-1 rounded-full hover:bg-white/10 transition-colors opacity-50 hover:opacity-100"
+          >
+            <X size={14} weight="bold" />
+          </button>
+        </div>
+      )}
 
       {/* Full-Screen Turnstile Overlay */}
       {showTurnstile && (
