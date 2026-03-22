@@ -12,7 +12,17 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git check-ignore:*)",
-      "Bash(claude mcp:*)"
+      "Bash(claude mcp:*)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__firecrawl__firecrawl_scrape",
+      "Bash(pkill -f \"next dev\")",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(find /Users/pranavnair/Foxtrot/Code/Personal/Mounterra/Hopeworks/turfin/turfin-waitlist -name *.json -path *claude*)",
+      "Bash(find ~/.claude -name *.json)",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_press_key"
     ]
   },
   "enabledPlugins": {
