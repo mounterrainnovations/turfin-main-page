@@ -7,7 +7,12 @@
       "Bash(npm install:*)",
       "Bash(node -e \"const {chromium} = require\\(''playwright''\\); console.log\\(''ok''\\)\")",
       "Bash(npm root:*)",
-      "Bash(node /tmp/pw-screenshots.mjs)"
+      "Bash(node /tmp/pw-screenshots.mjs)",
+      "Bash(git remote:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(claude mcp:*)"
     ]
   },
   "enabledPlugins": {
