@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
       const summaryTemplate = process.env.ZEPTO_TEMPLATE_KEY_DAILY_SUMMARY;
 
       if (adminEmail && summaryTemplate) {
-        const userListString = users.map((u) => u.email).join(", ");
+        const userListString = users.map((u) => u.email).join("<br>");
         
         await sendTemplateEmail({
           to: [{ email: adminEmail, name: "Admin" }],
@@ -46,6 +46,8 @@ export async function GET(request: NextRequest) {
             date: yesterdayStart.toLocaleDateString("en-IN"),
           },
         });
+      } else {
+        console.warn(`[Cron] Skipping daily summary email - ADMIN_EMAIL or ZEPTO_TEMPLATE_KEY_DAILY_SUMMARY is not configured.`);
       }
     }
 
